@@ -1,0 +1,66 @@
+server:
+  port: 8081
+
+
+spring:
+  profiles:
+    active: default
+  application:
+    name: MathEngineClient
+
+  # H2 in-memory R2DBC config
+  r2dbc:
+   url: r2dbc:h2:mem:///testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+   username: sa
+   password:
+
+  # OAuth 2 google client config
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: <client id>
+            client-secret: <client secret>
+            scope: openid,profile,email
+            redirect-uri: http://localhost:8080/login/oauth2/code/{registrationId}
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+
+#Spring boot actuator settings
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+  # Management and tracing configuration
+  tracing:
+    sampling:
+      probability: 1.0
+    baggage:
+      correlation:
+        enabled: true
+      remote-fields:
+        - userId
+        - calculationType
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
+
+# Logging configuration
+logging:
+  pattern:
+    correlation: "[%mdc{traceId:-},%mdc{spanId:-}]"
+  level:
+    io.micrometer.tracing: INFO
+    brave: INFO
+    root: INFO
+  file:
+    path: C:\MathEngineServices-logs
