@@ -53,7 +53,7 @@ pipeline {
                         services.each { service ->
                             def imageName = service.toLowerCase()
                             echo "Building image for ${service}"
-                            bat "docker build -t ${REGISTRY}/${GH_USER}/${imageName}:${VERSION} ."
+                            bat "docker build -t ${REGISTRY}/${GH_USER}/${imageName}:${VERSION} .\\${service}"
                             bat "docker push ${REGISTRY}/${GH_USER}/${imageName}:${VERSION}"
                         }
                     }
