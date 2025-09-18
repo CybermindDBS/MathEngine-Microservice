@@ -28,7 +28,7 @@ pipeline {
                     services.each { service ->
                         dir(service) {
                             echo "Running tests and packaging for ${service}"
-                            bat "./mvnw clean package -DskipTests=false"
+                            bat "mvn clean package -DskipTests=false"
                         }
                     }
                 }
