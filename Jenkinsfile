@@ -28,7 +28,7 @@ pipeline {
                     services.each { service ->
                         dir(service) {
                             echo "Running tests and packaging for ${service}"
-                            sh "./mvnw clean package -DskipTests=false"
+                            bat "./mvnw clean package -DskipTests=false"
                         }
                     }
                 }
@@ -48,13 +48,13 @@ pipeline {
                     ]
 
                     withCredentials([usernamePassword(credentialsId: 'ghcr-token', usernameVariable: 'GH_USER', passwordVariable: 'GH_TOKEN')]) {
-                        sh "echo $GH_TOKEN | docker login ${REGISTRY} -u $GH_USER --password-stdin"
+                        bat "echo $GH_TOKEN | docker login ${REGISTRY} -u $GH_USER --password-stdin"
 
                         services.each { service ->
                             def imageName = service.toLowerCase()
                             echo "Building image for ${service}"
-                            sh "docker build -t ${REGISTRY}/${GH_USER}/${imageName}:${VERSION} ."
-                            sh "docker push ${REGISTRY}/${GH_USER}/${imageName}:${VERSION}"
+                            bat "docker build -t ${REGISTRY}/${GH_USER}/${imageName}:${VERSION} ."
+                            bat "docker push ${REGISTRY}/${GH_USER}/${imageName}:${VERSION}"
                         }
                     }
                 }
