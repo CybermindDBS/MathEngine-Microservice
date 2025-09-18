@@ -1,0 +1,48 @@
+server:
+  port: 8082
+
+spring:
+  profiles:
+    active: default
+  data:
+    redis:
+      host: localhost
+      port: 6380
+
+  application:
+    name: MathEngineAssist
+
+  http:
+    codecs:
+      max-in-memory-size: 100MB
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+
+#Actuator settings
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
+  health:
+    redis:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include=*:
+
+
+#Logback settings for log file location
+logging:
+  file:
+    path: C:\MathEngineServices-logs
+

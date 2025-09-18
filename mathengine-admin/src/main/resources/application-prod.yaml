@@ -1,0 +1,6 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://mathengine-service-registry:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: false

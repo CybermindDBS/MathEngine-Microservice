@@ -1,0 +1,64 @@
+services:
+
+  mathengine-zipkin:
+    image: openzipkin/zipkin:latest
+    container_name: mathengine-zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - mathengine
+
+  mathengine-admin:
+    image: ghcr.io/cyberminddbs/math-engine-prod-admin-server:1.0
+    container_name: mathengine-admin
+    depends_on:
+      - mathengine-service-registry
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    networks:
+      - mathengine
+
+  mathengine-elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.0
+    container_name: mathengine-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    networks:
+      - mathengine
+    volumes:
+      - mathengine-elasticsearch-data:/usr/share/elasticsearch/data
+
+  mathengine-kibana:
+    image: docker.elastic.co/kibana/kibana:8.15.0
+    container_name: mathengine-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://mathengine-elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - mathengine-elasticsearch
+    networks:
+      - mathengine
+
+  mathengine-filebeat:
+    image: ghcr.io/cyberminddbs/math-engine-prod-filebeat:1.0
+    container_name: mathengine-filebeat
+    user: root
+    volumes:
+      # Docker Logs
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - mathengine-elasticsearch
+      - mathengine-kibana
+    restart: unless-stopped
+    networks:
+      - mathengine
+
+volumes:
+  mathengine-elasticsearch-data:
