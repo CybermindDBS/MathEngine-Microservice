@@ -9,7 +9,7 @@ services:
       - mathengine
 
   mathengine-admin:
-    image: ghcr.io/cyberminddbs/math-engine-prod-admin-server:1.0
+    image: ghcr.io/cyberminddbs/mathengine-admin:1.0
     container_name: mathengine-admin
     depends_on:
       - mathengine-service-registry
@@ -46,7 +46,7 @@ services:
       - mathengine
 
   mathengine-filebeat:
-    image: ghcr.io/cyberminddbs/math-engine-prod-filebeat:1.0
+    image: ghcr.io/cyberminddbs/mathengine-filebeat:1.0
     container_name: mathengine-filebeat
     user: root
     volumes:

@@ -1,7 +1,7 @@
 services:
 
     mathengine-service-registry:
-        image: ghcr.io/cyberminddbs/math-engine-prod-service-registry:1.0
+        image: ghcr.io/cyberminddbs/mathengine-service-registry:1.0
         container_name: mathengine-service-registry
         ports:
             - "8761:8761"
@@ -19,7 +19,7 @@ services:
             - mathengine-redis-data:/data
 
     mathengine-gateway:
-        image: ghcr.io/cyberminddbs/math-engine-prod-api-gateway:1.0
+        image: ghcr.io/cyberminddbs/mathengine-gateway:1.0
         container_name: mathengine-gateway
         depends_on:
             - mathengine-service-registry
@@ -32,7 +32,7 @@ services:
             - mathengine
 
     mathengine-assist:
-        image: ghcr.io/cyberminddbs/math-engine-prod-mathengine-assist:1.0
+        image: ghcr.io/cyberminddbs/mathengine-assist:1.0
         container_name: mathengine-assist
         depends_on:
             - mathengine-service-registry
@@ -45,7 +45,7 @@ services:
             - mathengine
 
     mathengine-core:
-        image: ghcr.io/cyberminddbs/math-engine-prod-mathengine:1.0
+        image: ghcr.io/cyberminddbs/mathengine-core:1.0
         depends_on:
             - mathengine-service-registry
             - mathengine-gateway
@@ -72,7 +72,7 @@ services:
             - mathengine-client-data:/var/lib/mysql
 
     mathengine-client:
-        image: ghcr.io/cyberminddbs/math-engine-prod-mathengine-client:1.0
+        image: ghcr.io/cyberminddbs/mathengine-client:1.0
         container_name: mathengine-client
         depends_on:
             - mathengine-service-registry
