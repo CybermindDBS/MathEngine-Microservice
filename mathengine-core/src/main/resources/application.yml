@@ -1,0 +1,52 @@
+server:
+  port: 8084
+
+spring:
+  profiles:
+    active: default
+  application:
+    name: MathEngine
+
+mathengineassist:
+  config:
+    min_wait_to_save: 250
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      evaluation:
+        registerHealthIndicator: true
+        slidingWindowSize: 10         # Number of calls to record in the window
+        minimumNumberOfCalls: 5       # At least 5 calls before calculating failure rate
+        failureRateThreshold: 50      # % of failures to trip the breaker
+        waitDurationInOpenState: 10s  # Time the breaker stays open before half-open
+        permittedNumberOfCallsInHalfOpenState: 3  # Allowed trial calls when half-open
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        recordExceptions:
+          - java.lang.Exception
+        ignoreExceptions:
+
+
+#Actuator settings for micrometer tracing:
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
+#Logback settings for log file location
+logging:
+  file:
+    path: C:\MathEngineServices-logs
